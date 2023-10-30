@@ -32,7 +32,6 @@ data class DetailScreen(private val channel: YtChannelDto) : Screen {
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
-
             )
             Text(
                 text = channel.title,
