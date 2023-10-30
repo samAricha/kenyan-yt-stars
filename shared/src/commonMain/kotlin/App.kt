@@ -1,5 +1,6 @@
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import data.model.YtChannelDto
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -35,6 +39,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import presentation.detail_screen.DetailScreen
 import presentation.home_screen.HomeViewModel
 import widgets.AppBar
 
@@ -65,11 +70,29 @@ fun KenyaYtAppTheme(
 @Composable
 fun App() {
     KenyaYtAppTheme {
-        val birdsViewModel = getViewModel(Unit, viewModelFactory {
-            HomeViewModel()
-        })
-        ChannelsPage(birdsViewModel)
+
+        Navigator(HomeScreen())
+
     }
+}
+
+class HomeScreen : Screen {
+    @Composable
+    override fun Content() {
+
+        val navigator = LocalNavigator.current
+
+        HomeView(navigator = navigator)
+    }
+}
+
+
+@Composable
+fun HomeView(navigator: Navigator?){
+    val birdsViewModel = getViewModel(Unit, viewModelFactory {
+        HomeViewModel()
+    })
+    ChannelsPage(birdsViewModel)
 }
 
 
@@ -103,13 +126,22 @@ fun ChannelsPage(viewModel: HomeViewModel){
 
 @Composable
 fun ChannelImageCell(image: YtChannelDto){
+    val navigator = LocalNavigator.current
+
     KamelImage(
         asyncPainterResource(
             data = image.highThumbnailUrl
         ),
         contentDescription = image.title,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxWidth().aspectRatio(9f/16f)
+        contentScale = ContentScale.Inside,
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .clickable {
+                if (navigator != null) {
+                    navigator.push(DetailScreen(channel = image))
+                }
+            }
     )
 }
 

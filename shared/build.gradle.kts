@@ -20,6 +20,8 @@ kotlin {
     }
 
     sourceSets {
+        val voyagerVersion = "1.0.0-rc07"
+
         val commonMain by getting {
             dependencies {
                 implementation(compose.runtime)
@@ -37,6 +39,17 @@ kotlin {
                 //moko navigation
                 api("dev.icerock.moko:mvvm-core:0.16.1")
                 api("dev.icerock.moko:mvvm-compose:0.16.1")
+
+                //voyager
+                // Used for the basic navigation
+                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+
+                // Allows us to use tab navigation for the bottom bar
+                implementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
+
+                // Support for transition animations
+                implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
             }
         }
         val androidMain by getting {
