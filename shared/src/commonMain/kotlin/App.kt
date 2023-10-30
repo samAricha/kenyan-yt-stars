@@ -14,7 +14,9 @@ import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,6 +36,7 @@ import io.kamel.image.asyncPainterResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import presentation.home_screen.HomeViewModel
+import widgets.AppBar
 
 
 @Composable
@@ -48,7 +51,14 @@ fun KenyaYtAppTheme(
             large = AbsoluteCutCornerShape(0.dp)
         )
     ){
-        content()
+        Scaffold (
+            topBar = {
+                AppBar()
+            },
+           content = {
+               content()
+           }
+        )
     }
 }
 
@@ -99,7 +109,7 @@ fun ChannelImageCell(image: YtChannelDto){
         ),
         contentDescription = image.title,
         contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxWidth().aspectRatio(1.0f)
+        modifier = Modifier.fillMaxWidth().aspectRatio(9f/16f)
     )
 }
 

@@ -52,7 +52,7 @@ class HomeViewModel : ViewModel() {
 
     private suspend fun getImages(): List<YtChannelDto> {
         val images = httpClient
-            .get("https://0d0f-105-161-214-102.ngrok-free.app/api/getChannel")
+            .get("https://c9e5-197-183-255-76.ngrok-free.app/api/getChannel")
             .body<List<YtChannelDto>>()
 
         return images
