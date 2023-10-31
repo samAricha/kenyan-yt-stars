@@ -50,6 +50,9 @@ kotlin {
                 // Support for transition animations
                 implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
 
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+
             }
         }
         val androidMain by getting {
@@ -60,6 +63,18 @@ kotlin {
 
                 //additional dependencies
                 implementation("io.ktor:ktor-client-android:2.3.5")
+                //video-player
+                implementation("androidx.media3:media3-exoplayer:1.1.1")
+                implementation("androidx.media3:media3-exoplayer-dash:1.1.1")
+                implementation("androidx.media3:media3-ui:1.1.1")
+                //exo-player
+                implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+                implementation ("androidx.media3:media3-exoplayer:1.1.1")
+                implementation ("androidx.media3:media3-ui:1.1.1")
+                implementation ("androidx.media3:media3-exoplayer-dash:1.1.1")
+                //youtube-player
+                implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
+
             }
         }
         val iosX64Main by getting

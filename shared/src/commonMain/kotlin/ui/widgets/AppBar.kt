@@ -1,4 +1,4 @@
-package widgets
+package ui.widgets
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton

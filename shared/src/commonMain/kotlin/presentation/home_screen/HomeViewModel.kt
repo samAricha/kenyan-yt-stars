@@ -1,6 +1,6 @@
 package presentation.home_screen
 
-import data.model.YtChannelDto
+import data.dto.YtChannelDto
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 
 data class HomeScreenUiState(
     val images: List<YtChannelDto> = emptyList(),
@@ -52,7 +51,7 @@ class HomeViewModel : ViewModel() {
 
     private suspend fun getImages(): List<YtChannelDto> {
         val images = httpClient
-            .get("https://c9e5-197-183-255-76.ngrok-free.app/api/getChannel")
+            .get("https://c7f6-41-89-128-5.ngrok-free.app/api/getChannel")
             .body<List<YtChannelDto>>()
 
         return images
