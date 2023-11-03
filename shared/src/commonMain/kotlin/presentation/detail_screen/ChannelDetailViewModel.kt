@@ -19,11 +19,14 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import utils.apis.ApiUrl
+import utils.apis.ApiUtils
 
 
 data class DetailScreenUiState(
@@ -41,6 +44,12 @@ class ChannelDetailViewModel(private val channelId: String): ViewModel() {
     private val _uiState = MutableStateFlow<DetailScreenUiState>(DetailScreenUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _isChannelDetailsSyncing = MutableStateFlow(false)
+    val isChannelDetailsSyncing: StateFlow<Boolean> = _isChannelDetailsSyncing
+
+    val channelDetailsUrl = ApiUrl.GetChannelDetailsUrl
+    val completeChannelDetailsUrl = ApiUtils.generateApiUrl(channelDetailsUrl)
+
     private val httpClient : HttpClient = HttpClient {
         install(ContentNegotiation){
             json()
@@ -53,11 +62,19 @@ class ChannelDetailViewModel(private val channelId: String): ViewModel() {
 
     fun updateChannelPlaylist(){
         viewModelScope.launch {
-            val channelPlaylists = getChannelPlaylists(channelId = channelId)
+            try {
+                _isChannelDetailsSyncing.value = true
 
-            _uiState.update {
-                it.copy(playlists = channelPlaylists)
+                val channelPlaylists = getChannelPlaylists(channelId = channelId)
+                _uiState.update {
+                    it.copy(playlists = channelPlaylists)
+                }
+            }catch (e :Exception){
+                println("<<<<${e.message}>>>")
+            }finally {
+                _isChannelDetailsSyncing.value = false
             }
+
         }
     }
 
@@ -73,13 +90,8 @@ class ChannelDetailViewModel(private val channelId: String): ViewModel() {
 
     private suspend fun getChannelPlaylists(channelId: String): List<ChannelPlaylistDto> {
 
-        val playlistUrl = "https://c7f6-41-89-128-5.ngrok-free.app/api/playlists/getChannelPlaylists"
-//        val channelPlaylist = httpClient
-//            .get(playlistUrl)
-//            .body<List<ChannelPlaylistDto>>()
-
+        val playlistUrl = completeChannelDetailsUrl
         val channelPlaylistRequest = ChannelPlaylistRequest(channelId)
-
         val response  =  withContext(Dispatchers.IO) {
             httpClient.post(playlistUrl) {
                 contentType(ContentType.Application.Json)

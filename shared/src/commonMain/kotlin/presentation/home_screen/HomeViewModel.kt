@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import utils.apis.ApiUrl
 import utils.apis.ApiUtils
+import kotlin.math.log
 
 data class HomeScreenUiState(
     val images: List<YtChannelDto> = emptyList(),
@@ -77,9 +78,9 @@ class HomeViewModel : ViewModel() {
     }
 
     fun updatePodcastList(){
-        try {
-            _isSyncing.value = true
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                _isSyncing.value = true
                 val podcastLists = getPodcasts()
                 _podcastUiState.update {
                     it.copy(images = podcastLists)
@@ -87,19 +88,21 @@ class HomeViewModel : ViewModel() {
                 _uiState.update {
                     it.copy(images = _podcastUiState.value.images)
                 }
+
+            }catch (e: Exception){
+
+            } finally {
+                _isSyncing.value = false
             }
-
-        }catch (e: Exception){
-
-        } finally {
-            _isSyncing.value = false
         }
+
+
     }
 
     fun updateComedyList(){
-        try {
-            _isSyncing.value = true
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                _isSyncing.value = true
                 val comedyList = getComedies()
                 _comedyUiState.update {
                     it.copy(images = comedyList)
@@ -107,21 +110,19 @@ class HomeViewModel : ViewModel() {
                 _uiState.update {
                     it.copy(images = _comedyUiState.value.images)
                 }
+
+            } catch (e: Exception) {
+
+            } finally {
+                _isSyncing.value = false
             }
-
-        }catch (e: Exception){
-
-        } finally {
-            _isSyncing.value = false
         }
-
-
     }
 
     fun updatePlaylistersList(){
-        try {
-            _isSyncing.value = true
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
+                _isSyncing.value = true
                 val playlistersList = getPlaylisters()
                 _playlistersUiState.update {
                     it.copy(images = playlistersList)
@@ -129,12 +130,12 @@ class HomeViewModel : ViewModel() {
                 _uiState.update {
                     it.copy(images = _playlistersUiState.value.images)
                 }
+
+            } catch (e: Exception) {
+
+            } finally {
+                _isSyncing.value = false
             }
-
-        }catch (e: Exception){
-
-        } finally {
-            _isSyncing.value = false
         }
     }
 
@@ -147,6 +148,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private suspend fun getPodcasts(): List<YtChannelDto> {
+        println(">>>>>getting podcasts")
         val podcastList = httpClient
             .get(completeChannelsUrl)
             .body<List<YtChannelDto>>()
@@ -154,6 +156,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private suspend fun getComedies(): List<YtChannelDto> {
+        println(">>>>>getting comedies")
         val comedyList = httpClient
             .get(completeChannelsUrl)
             .body<List<YtChannelDto>>()
@@ -161,6 +164,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private suspend fun getPlaylisters(): List<YtChannelDto> {
+        println(">>>>>getting playlisters")
         val playlistersList = httpClient
             .get(completeChannelsUrl)
             .body<List<YtChannelDto>>()

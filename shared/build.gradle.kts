@@ -21,6 +21,7 @@ kotlin {
 
     sourceSets {
         val voyagerVersion = "1.0.0-rc07"
+        val ktorVersion = "2.2.2"
 
         val commonMain by getting {
             dependencies {
@@ -74,6 +75,9 @@ kotlin {
                 implementation ("androidx.media3:media3-exoplayer-dash:1.1.1")
                 //youtube-player
                 implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
+                //logger
+                implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
 
             }
         }
@@ -111,4 +115,7 @@ android {
     kotlin {
         jvmToolchain(17)
     }
+}
+dependencies {
+    implementation("androidx.media3:media3-common:1.1.1")
 }

@@ -12,6 +12,9 @@ object ApiUtils {
             is ApiUrl.GetChannelsUrl -> {
                 ApiConstants.BASE_URL + ApiConstants.ALL_CHANNELS_ENDPOINT
             }
+            is ApiUrl.GetChannelDetailsUrl -> {
+                ApiConstants.BASE_URL + ApiConstants.CHANNEL_DETAILS_ENDPOINT
+            }
             is ApiUrl.CustomUrl -> {
                 ApiConstants.BASE_URL + apiUrl.path
             }
