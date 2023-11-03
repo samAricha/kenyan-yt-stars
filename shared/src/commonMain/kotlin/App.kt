@@ -29,6 +29,7 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import presentation.detail_screen.DetailScreen
+import presentation.home_screen.HomeScreen
 import presentation.home_screen.HomeViewModel
 import presentation.video_player_screen.VideoPlayerScreen
 import ui.widgets.AppBar
@@ -64,81 +65,7 @@ fun App() {
     }
 }
 
-class HomeScreen : Screen {
-    @Composable
-    override fun Content() {
 
-        val navigator = LocalNavigator.current
-
-        HomeView(navigator = navigator)
-    }
-}
-
-
-@Composable
-fun HomeView(navigator: Navigator?){
-    val birdsViewModel = getViewModel(Unit, viewModelFactory {
-        HomeViewModel()
-    })
-    ChannelsPage(birdsViewModel)
-}
-
-
-
-@Composable
-fun ChannelsPage(viewModel: HomeViewModel){
-    val uiState by viewModel.uiState.collectAsState()
-
-    Column(
-        Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-
-        AnimatedVisibility(uiState.images.isNotEmpty()){
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                horizontalArrangement =  Arrangement.spacedBy(5.dp),
-                verticalArrangement = Arrangement.spacedBy(5.dp),
-                modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp),
-                content = {
-                    items(uiState.images ){
-                        ChannelImageCell(it)
-                    }
-                }
-            )
-        }
-    }
-}
-
-
-@Composable
-fun ChannelImageCell(image: YtChannelDto){
-    val navigator = LocalNavigator.current
-
-    KamelImage(
-        asyncPainterResource(
-            data = image.highThumbnailUrl
-        ),
-        contentDescription = image.title,
-        contentScale = ContentScale.Inside,
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .clickable {
-                if (navigator != null) {
-                    navigator.push(DetailScreen(channel = image))
-//                    navigator.push(
-//                        VideoPlayerScreen(
-//                            modifier = Modifier,
-//                            url = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-//                        )
-//                    )
-                }
-
-            }
-    )
-}
 
 
 expect fun getPlatformName(): String
