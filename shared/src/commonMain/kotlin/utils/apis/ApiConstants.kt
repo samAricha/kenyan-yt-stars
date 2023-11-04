@@ -1,7 +1,7 @@
 package utils.apis
 
 object ApiConstants {
-    const val BASE_URL = "https://5251-41-89-128-5.ngrok-free.app/api/"
+    const val BASE_URL = "https://73df-196-97-180-100.ngrok-free.app/api/"
     const val ALL_CHANNELS_ENDPOINT = "getChannel"
     const val ALL_PODCASTS_ENDPOINT = "getChannel"
     const val ALL_COMEDIANS_ENDPOINT = "getChannel"

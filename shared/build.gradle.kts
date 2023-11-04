@@ -22,6 +22,8 @@ kotlin {
     sourceSets {
         val voyagerVersion = "1.0.0-rc07"
         val ktorVersion = "2.2.2"
+        val koin_version = "3.5.0"
+        val koin_compose_version = "1.1.0"
 
         val commonMain by getting {
             dependencies {
@@ -54,6 +56,10 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
+                //koin
+                implementation ("io.insert-koin:koin-core:$koin_version")
+                implementation ("io.insert-koin:koin-compose:$koin_compose_version")
+
             }
         }
         val androidMain by getting {
@@ -77,6 +83,9 @@ kotlin {
                 implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
                 //logger
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                //koin
+                implementation ("io.insert-koin:koin-android:$koin_version")
+
 
 
             }
@@ -118,4 +127,5 @@ android {
 }
 dependencies {
     implementation("androidx.media3:media3-common:1.1.1")
+    implementation("com.google.android.datatransport:transport-runtime:3.2.0")
 }

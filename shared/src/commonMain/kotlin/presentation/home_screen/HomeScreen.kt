@@ -37,29 +37,37 @@ import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.koin.compose.rememberKoinInject
+import org.koin.core.component.get
 import presentation.detail_screen.DetailScreen
 import ui.widgets.CategoryItem
 import ui.widgets.CircularProgressIndicator
+import org.koin.core.component.get
+
 
 
 class HomeScreen : Screen {
     @Composable
     override fun Content() {
-
+        val homeViewModel = getViewModel(Unit, viewModelFactory {
+            HomeViewModel()
+        })
+//        HomeView(homeViewModel)
         HomeView()
-
     }
 }
 
 
 @Composable
 fun HomeView(){
-    val homeViewModel = getViewModel(Unit, viewModelFactory {
-        HomeViewModel()
-    })
+    val homeViewModel = rememberKoinInject<HomeViewModel>()
     val isSyncing by homeViewModel.isSyncing.collectAsState()
 
+
+
     var selectedCategory by remember { mutableStateOf(Utils.channelCategories[0]) }
+    homeViewModel.updateImages()
+    val uiState by homeViewModel.uiState.collectAsState()
 
 
     val collections: HomeScreenUiState = when (selectedCategory) {
@@ -87,7 +95,9 @@ fun HomeView(){
         Column(
             modifier = Modifier.padding(top = 5.dp)
         ) {
-            Box {
+            Box (
+                modifier = Modifier.fillMaxSize()
+            ){
                 Column {
                     LazyRow(Modifier.padding(vertical = 10.dp,)) {
                         item{
@@ -104,7 +114,8 @@ fun HomeView(){
                         }
                     }
                     //this is the main content containing our list
-                    ChannelsPage(collections)
+                    println("+++++++++>${ collections.images }<+++++++++")
+                    ChannelsPage(uiState)
                 }
                 if (isSyncing) {
                     CircularProgressIndicator()

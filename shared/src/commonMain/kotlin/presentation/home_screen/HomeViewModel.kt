@@ -55,22 +55,24 @@ class HomeViewModel : ViewModel() {
         updateImages()
     }
 
-    override fun onCleared() {
-        httpClient.close()
-    }
+//    override fun onCleared() {
+//        httpClient.close()
+//    }
 
 
     fun updateImages(){
         viewModelScope.launch {
             try {
+                println(">>>>>updating images")
                 _isSyncing.value = true
                 val images = getImages()
                 _uiState.update {
                     it.copy(images = images)
                 }
             }catch (e: Exception){
-
+                println(">>>>>updating images error>>>>>>$e")
             } finally {
+                println(">>>>>updating images finally")
                 _isSyncing.value = false
             }
 
@@ -141,6 +143,8 @@ class HomeViewModel : ViewModel() {
 
 
     private suspend fun getImages(): List<YtChannelDto> {
+        println(">>>>>getting images")
+
         val images = httpClient
             .get(completeChannelsUrl)
             .body<List<YtChannelDto>>()
