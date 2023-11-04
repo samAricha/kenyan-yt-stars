@@ -1,4 +1,4 @@
-package presentation.playlist_videos_screen
+package presentation.video_list_screen
 
 import data.dto.PlaylistVideoDto
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -20,18 +20,18 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 
-data class PlaylistVideosScreenUiState(
+data class VideoListScreenUiState(
     val playlistVideos: List<PlaylistVideoDto> = emptyList(),
 //    val selectedCategory: String? = null
 )
 
 @Serializable
-data class PlaylistVideosRequest(val playlistId: String)
+data class VideoListRequest(val playlistId: String)
 
 
-class PlaylistVideosViewModel(val playlistId: String) : ViewModel(){
+class VideoListViewModel(val playlistId: String) : ViewModel(){
 
-    private val _uiState = MutableStateFlow<PlaylistVideosScreenUiState>(PlaylistVideosScreenUiState())
+    private val _uiState = MutableStateFlow<VideoListScreenUiState>(VideoListScreenUiState())
     val uiState = _uiState.asStateFlow()
 
 
@@ -58,7 +58,7 @@ class PlaylistVideosViewModel(val playlistId: String) : ViewModel(){
 
     private suspend fun getPlaylistVideos(playlistId: String) : List<PlaylistVideoDto>{
         val videoListsUrl = "https://c7f6-41-89-128-5.ngrok-free.app/api/playlists/getPlaylistVideos"
-        val playlistVideosRequest = PlaylistVideosRequest(playlistId)
+        val playlistVideosRequest = VideoListRequest(playlistId)
 
         val response  =  withContext(Dispatchers.IO) {
             httpClient.post(videoListsUrl) {

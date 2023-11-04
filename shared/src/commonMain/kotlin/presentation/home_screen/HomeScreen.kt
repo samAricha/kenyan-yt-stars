@@ -115,7 +115,7 @@ fun HomeView(){
                     }
                     //this is the main content containing our list
                     println("+++++++++>${ collections.images }<+++++++++")
-                    ChannelsPage(uiState)
+                    ChannelsPage(uiState, selectedCategory)
                 }
                 if (isSyncing) {
                     CircularProgressIndicator()
@@ -131,13 +131,14 @@ fun HomeView(){
 
 
 @Composable
-fun ChannelsPage(uiState: HomeScreenUiState){
+fun ChannelsPage(uiState: HomeScreenUiState, selectedCategory: Category){
 
     Column(
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        println(">>>>>>>>>>>>${selectedCategory}----------")
 
         AnimatedVisibility(uiState.images.isNotEmpty()){
             LazyVerticalGrid(
@@ -147,7 +148,7 @@ fun ChannelsPage(uiState: HomeScreenUiState){
                 modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp),
                 content = {
                     items(uiState.images ){
-                        ChannelImageCell(it)
+                        ChannelImageCell(it, selectedCategory)
                     }
                 }
             )
@@ -157,7 +158,7 @@ fun ChannelsPage(uiState: HomeScreenUiState){
 
 
 @Composable
-fun ChannelImageCell(image: YtChannelDto){
+fun ChannelImageCell(image: YtChannelDto, selectedCategory: Category){
     val navigator = LocalNavigator.current
 
     KamelImage(
@@ -171,7 +172,7 @@ fun ChannelImageCell(image: YtChannelDto){
             .aspectRatio(1f)
             .clickable {
                 if (navigator != null) {
-                    navigator.push(DetailScreen(channel = image))
+                    navigator.push(DetailScreen(channel = image,selectedCategory =  selectedCategory))
                 }
 
             }

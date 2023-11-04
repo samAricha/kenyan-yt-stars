@@ -1,4 +1,4 @@
-package presentation.playlist_videos_screen
+package presentation.video_list_screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -27,28 +27,28 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import presentation.video_player_screen.VideoPlayerScreen
 
-class PlaylistVideosScreen(val playlistId : String) : Screen {
+class VideoListScreen(val playlistId : String) : Screen {
     @Composable
     override fun Content() {
 
-        val playlistVideosViewModel = getViewModel(Unit, viewModelFactory {
-            PlaylistVideosViewModel(playlistId = playlistId)
+        val videoListViewModel = getViewModel(Unit, viewModelFactory {
+            VideoListViewModel(playlistId = playlistId)
         })
-        val uiState by playlistVideosViewModel.uiState.collectAsState()
+        val uiState by videoListViewModel.uiState.collectAsState()
         val navigator = LocalNavigator.current
         val videoBaseUrl = "https://www.youtube.com/watch?v="
 
         LazyColumn {
 
-            items(uiState.playlistVideos) { playlistVideo ->
-                PlaylistVideosItem(
-                    playlistVideo = playlistVideo,
+            items(uiState.playlistVideos) { channelVideo ->
+                VideoListItem(
+                    playlistVideo = channelVideo,
                     onItemClick = {
                         if (navigator != null) {
                             navigator.push(
                                 VideoPlayerScreen(
                                     modifier = Modifier,
-                                    url = videoBaseUrl + playlistVideo.videoId
+                                    url = videoBaseUrl + channelVideo.videoId
                                 )
                             )
                         }
@@ -60,7 +60,7 @@ class PlaylistVideosScreen(val playlistId : String) : Screen {
     }
 
     @Composable
-    fun PlaylistVideosItem(
+    fun VideoListItem(
         playlistVideo: PlaylistVideoDto,
         onItemClick: (PlaylistVideoDto) -> Unit
     ) {
