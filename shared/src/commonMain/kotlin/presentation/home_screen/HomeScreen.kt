@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -31,18 +30,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
 import data.dto.YtChannelDto
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import org.koin.compose.rememberKoinInject
-import org.koin.core.component.get
 import presentation.detail_screen.DetailScreen
 import ui.widgets.CategoryItem
 import ui.widgets.CircularProgressIndicator
-import org.koin.core.component.get
 
 
 
@@ -66,23 +62,27 @@ fun HomeView(){
 
 
     var selectedCategory by remember { mutableStateOf(Utils.channelCategories[0]) }
-    homeViewModel.updateImages()
+//    homeViewModel.updateImages()
     val uiState by homeViewModel.uiState.collectAsState()
 
 
     val collections: HomeScreenUiState = when (selectedCategory) {
         Utils.channelCategories[0] -> {
+            homeViewModel.updateImages()
+            val allChannelsUiState by homeViewModel.uiState.collectAsState()
+            allChannelsUiState
+        }
+        Utils.channelCategories[1] -> {
             homeViewModel.updatePodcastList()
             val podcastsState by homeViewModel.podcastUiState.collectAsState()
             podcastsState
         }
-        Utils.channelCategories[1] -> {
-
+        Utils.channelCategories[2] -> {
             homeViewModel.updatePlaylistersList()
             val playlistersState by homeViewModel.playlistersUiState.collectAsState()
             playlistersState
         }
-        Utils.channelCategories[2] -> {
+        Utils.channelCategories[3] -> {
             homeViewModel.updateComedyList()
             val comediesState by homeViewModel.comedyUiState.collectAsState()
             comediesState
@@ -132,7 +132,6 @@ fun HomeView(){
 
 @Composable
 fun ChannelsPage(uiState: HomeScreenUiState){
-//    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         Modifier.fillMaxWidth(),

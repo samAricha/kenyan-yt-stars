@@ -12,6 +12,15 @@ object ApiUtils {
             is ApiUrl.GetChannelsUrl -> {
                 ApiConstants.BASE_URL + ApiConstants.ALL_CHANNELS_ENDPOINT
             }
+            is ApiUrl.GetPlaylistersUrl -> {
+                ApiConstants.BASE_URL + ApiConstants.ALL_PLAYLISTERS_ENDPOINT
+            }
+            is ApiUrl.GetPodcastsUrl -> {
+                ApiConstants.BASE_URL + ApiConstants.ALL_PODCASTS_ENDPOINT
+            }
+            is ApiUrl.GetComediesUrl -> {
+                ApiConstants.BASE_URL + ApiConstants.ALL_COMEDIANS_ENDPOINT
+            }
             is ApiUrl.GetChannelDetailsUrl -> {
                 ApiConstants.BASE_URL + ApiConstants.CHANNEL_DETAILS_ENDPOINT
             }

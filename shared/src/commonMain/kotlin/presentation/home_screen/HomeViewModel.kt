@@ -40,7 +40,14 @@ class HomeViewModel : ViewModel() {
     val isSyncing: StateFlow<Boolean> = _isSyncing
 
     val channelsUrl = ApiUrl.GetChannelsUrl
+    val podcastsUrl = ApiUrl.GetPodcastsUrl
+    val playlistersUrl = ApiUrl.GetPlaylistersUrl
+    val comediesUrl = ApiUrl.GetComediesUrl
+
     val completeChannelsUrl = ApiUtils.generateApiUrl(channelsUrl)
+    val completePodcastChannelsUrl = ApiUtils.generateApiUrl(podcastsUrl)
+    val completePlaylistersChannelsUrl = ApiUtils.generateApiUrl(playlistersUrl)
+    val completeComediesChannelsUrl = ApiUtils.generateApiUrl(comediesUrl)
 
 
 
@@ -51,9 +58,9 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    init {
-        updateImages()
-    }
+//    init {
+//        updateImages()
+//    }
 
 //    override fun onCleared() {
 //        httpClient.close()
@@ -154,7 +161,7 @@ class HomeViewModel : ViewModel() {
     private suspend fun getPodcasts(): List<YtChannelDto> {
         println(">>>>>getting podcasts")
         val podcastList = httpClient
-            .get(completeChannelsUrl)
+            .get(completePodcastChannelsUrl)
             .body<List<YtChannelDto>>()
         return podcastList
     }
@@ -162,7 +169,7 @@ class HomeViewModel : ViewModel() {
     private suspend fun getComedies(): List<YtChannelDto> {
         println(">>>>>getting comedies")
         val comedyList = httpClient
-            .get(completeChannelsUrl)
+            .get(completeComediesChannelsUrl)
             .body<List<YtChannelDto>>()
         return comedyList
     }
@@ -170,7 +177,7 @@ class HomeViewModel : ViewModel() {
     private suspend fun getPlaylisters(): List<YtChannelDto> {
         println(">>>>>getting playlisters")
         val playlistersList = httpClient
-            .get(completeChannelsUrl)
+            .get(completePlaylistersChannelsUrl)
             .body<List<YtChannelDto>>()
         return playlistersList
     }
