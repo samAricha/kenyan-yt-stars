@@ -19,12 +19,17 @@ package di
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import presentation.home_screen.HomeViewModel
+import presentation.video_list_screen.VideoListViewModel
 
 fun commonModule() = module {
 
     single<HomeViewModel> {
         HomeViewModel()
     }
+
+    // Define a factory for creating VideoListViewModel with a channelId
+    factory { (channelId: String) -> VideoListViewModel(channelId) }
+
 
 //    single<MainViewModel> {
 //        MainViewModel(

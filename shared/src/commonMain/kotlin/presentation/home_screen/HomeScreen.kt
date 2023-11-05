@@ -37,6 +37,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import org.koin.compose.rememberKoinInject
 import presentation.detail_screen.DetailScreen
+import presentation.video_list_screen.VideoListScreen
 import ui.widgets.CategoryItem
 import ui.widgets.CircularProgressIndicator
 
@@ -172,7 +173,13 @@ fun ChannelImageCell(image: YtChannelDto, selectedCategory: Category){
             .aspectRatio(1f)
             .clickable {
                 if (navigator != null) {
-                    navigator.push(DetailScreen(channel = image,selectedCategory =  selectedCategory))
+                    if (selectedCategory.id != 2){
+                        println(">>>>>>selected-category = ${selectedCategory.id}")
+                        navigator.push(VideoListScreen(channelId = image.channelId))
+                    }else{
+                        println(">>>>>>selected-category = ${selectedCategory.id}")
+                        navigator.push(DetailScreen(channel = image,selectedCategory =  selectedCategory))
+                    }
                 }
 
             }

@@ -6,6 +6,7 @@ object ApiConstants {
     const val ALL_PODCASTS_ENDPOINT = "channels/getPodcastChannels"
     const val ALL_COMEDIANS_ENDPOINT = "channels/getComedyChannels"
     const val ALL_PLAYLISTERS_ENDPOINT = "channels/getPlaylistChannels"
+    const val CHANNEL_VIDEOS_ENDPOINT = "channels/getChannelVideos"
     const val CHANNEL_DETAILS_ENDPOINT = "playlists/getChannelPlaylists"
     const val USER_DATA_ENDPOINT = "user/{userId}"
     const val POST_ENDPOINT = "post/{postId}"
