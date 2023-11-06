@@ -30,6 +30,7 @@ import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import presentation.home_screen.Category
 import presentation.playlist_videos_screen.PlaylistVideosScreen
+import presentation.video_list_screen.VideoListScreen
 import ui.widgets.CircularProgressIndicatorHorizontalWidth
 
 
@@ -106,6 +107,8 @@ data class DetailScreen(
                                                     playlistId = playlist.playlistId
                                                 )
                                             )
+//                                            navigator.push(VideoListScreen(channelId = "UC4tjY2tTltEKePusozUxtSA"))
+
                                         }
                                     })
                             }

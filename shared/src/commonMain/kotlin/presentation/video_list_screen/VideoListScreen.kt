@@ -83,52 +83,53 @@ class VideoListScreen(val channelId : String) : Screen {
 
                     }
                 }
-
-                if (isSyncing) {
-                    CircularProgressIndicator()
-
-                }
             }
-            }
+            if (isSyncing) {
+                CircularProgressIndicator()
 
-    }
-
-    @Composable
-    fun VideoListItem(
-        channelVideo: ChannelVideoDto,
-        onItemClick: (ChannelVideoDto) -> Unit
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .clickable { onItemClick(channelVideo) },
-            shape = RoundedCornerShape(16.dp),
-            elevation = 4.dp
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                KamelImage(
-                    asyncPainterResource(data = channelVideo.highQualityThumbnail),
-                    contentDescription = channelVideo.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth(0.6f)
-                        .aspectRatio(16f/9f)// Adjust the width as needed (e.g., 50% of the parent width)
-                )
-
-                Text(
-                    text = channelVideo.title,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                )
             }
         }
 
     }
+
+
+}
+
+@Composable
+fun VideoListItem(
+    channelVideo: ChannelVideoDto,
+    onItemClick: (ChannelVideoDto) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onItemClick(channelVideo) },
+        shape = RoundedCornerShape(16.dp),
+        elevation = 4.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            KamelImage(
+                asyncPainterResource(data = channelVideo.highQualityThumbnail),
+                contentDescription = channelVideo.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth(0.6f)
+                    .aspectRatio(16f/9f)// Adjust the width as needed (e.g., 50% of the parent width)
+            )
+
+            Text(
+                text = channelVideo.title,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
+        }
+    }
+
 }

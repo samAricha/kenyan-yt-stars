@@ -1,5 +1,6 @@
-package presentation.playlist_videos_screen
+package presentation.video_list_screen
 
+import data.dto.ChannelVideoDto
 import data.dto.PlaylistVideoDto
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.ktor.client.HttpClient
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import presentation.video_list_screen.VideoListRequest
+import presentation.playlist_videos_screen.PlaylistVideosRequest
 import utils.apis.ApiUrl
 import utils.apis.ApiUtils
 
@@ -30,19 +31,24 @@ data class PlaylistVideosScreenUiState(
 )
 
 @Serializable
-data class PlaylistVideosRequest(val playlistId: String)
+data class PlaylistVideoListRequest(val playlistId: String)
 
 
-class PlaylistVideosViewModel(val playlistId: String) : ViewModel(){
+class PlaylistVideoListViewModel(val playlistId: String) : ViewModel(){
 
     private val _uiState = MutableStateFlow<PlaylistVideosScreenUiState>(PlaylistVideosScreenUiState())
     val uiState = _uiState.asStateFlow()
+
+    val channelVideosUrl = ApiUrl.GetChannelVideosUrl
+    val completeChannelVideosUrl = ApiUtils.generateApiUrl(channelVideosUrl)
 
     val playlistVideosUrl = ApiUrl.GetPlaylistVideosUrl
     val completePlaylistVideosUrl = ApiUtils.generateApiUrl(playlistVideosUrl)
 
     private val _isSyncing = MutableStateFlow(false)
     val isSyncing: StateFlow<Boolean> = _isSyncing
+
+
 
 
     private val httpClient : HttpClient = HttpClient {
@@ -53,48 +59,55 @@ class PlaylistVideosViewModel(val playlistId: String) : ViewModel(){
 
     init {
         _isSyncing.value = true
-//        updatePlaylistVideos()
+        updateChannelVideos()
+        println("Video list view model init function")
+    }
+
+    override fun onCleared() {
+        httpClient.close()
     }
 
 
-    fun updatePlaylistVideos(){
-        println("inside updatePlaylistVideos part1,,,,,,,,")
+
+    fun updateChannelVideos(){
+        println("inside updateChannelVideos part1,,,,,,,,")
 
         viewModelScope.launch(Dispatchers.IO) {
+            println("inside updatePlaylistVideos,,,,,,,,")
+
             try {
                 _isSyncing.value = true
-                val playlistVideos = getPlaylistVideos(playlistId = playlistId)
-                println("playlist videos ====>>>>> ${playlistVideos}")
+                val channelVideos = getChannelVideos(playlistId = playlistId)
+                println("vidoes view model videos,,,,,,,,${channelVideos}")
                 _uiState.update {
-                    it.copy(playlistVideos = playlistVideos)
+                    it.copy(playlistVideos = channelVideos)
                 }
-                println("uistate videos ====>>>>> ${uiState.value}")
-            }catch (e: Exception){
+            }catch (e:Exception){
                 println("Exception =====> ${e}")
             }finally {
                 println("finally =====> ${uiState.value.playlistVideos}")
                 _isSyncing.value = false
+
             }
 
         }
     }
 
-    private suspend fun getPlaylistVideos(
-        playlistId: String
-    ) : List<PlaylistVideoDto>{
-        println("Getting Playlist Videos")
-        val videoListsUrl = completePlaylistVideosUrl
-        val playlistVideosRequest = PlaylistVideosRequest("PLJcxGk1ibvxcY0yuBniKfaS7QlV-8JPPX")
+    private suspend fun getChannelVideos(playlistId: String) : List<PlaylistVideoDto>{
+        println("inside channel videos--=======>>>>")
+
+        val playlistVideosUrl = completePlaylistVideosUrl
+        val playlistVideosRequest = PlaylistVideoListRequest(playlistId)
 
         val response  =  withContext(Dispatchers.IO) {
-            httpClient.post(videoListsUrl) {
+            httpClient.post(playlistVideosUrl) {
                 contentType(ContentType.Application.Json)
                 setBody(playlistVideosRequest)
             }.body<List<PlaylistVideoDto>>()
         }
 
 
-        println("inside gpv------->${response}")
+        println("inside gottedChannelVideos------->${response}")
         return response
 
     }

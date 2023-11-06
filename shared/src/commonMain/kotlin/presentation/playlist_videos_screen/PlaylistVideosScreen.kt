@@ -23,11 +23,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import data.dto.ChannelVideoDto
 import data.dto.PlaylistVideoDto
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import presentation.video_list_screen.PlaylistVideoListViewModel
+import presentation.video_list_screen.VideoListItem
+import presentation.video_list_screen.VideoListViewModel
 import presentation.video_player_screen.VideoPlayerScreen
 import ui.widgets.CircularProgressIndicator
 import ui.widgets.CircularProgressIndicatorHorizontalWidth
@@ -36,14 +40,14 @@ class PlaylistVideosScreen(val playlistId : String) : Screen {
     @Composable
     override fun Content() {
 
-        val playlistVideosViewModel = getViewModel(Unit, viewModelFactory {
-            PlaylistVideosViewModel(playlistId = playlistId)
+        val playlistVideolistViewModel = getViewModel(Unit, viewModelFactory {
+            PlaylistVideoListViewModel(playlistId = playlistId)
         })
 
-        val isSyncing by playlistVideosViewModel.isSyncing.collectAsState()
 
-        playlistVideosViewModel.updatePlaylistVideos()
-        val uiState by playlistVideosViewModel.uiState.collectAsState()
+        val isSyncing by playlistVideolistViewModel.isSyncing.collectAsState()
+
+        val uiState by playlistVideolistViewModel.uiState.collectAsState()
 
         val navigator = LocalNavigator.current
         val videoBaseUrl = "https://www.youtube.com/watch?v="
@@ -54,29 +58,73 @@ class PlaylistVideosScreen(val playlistId : String) : Screen {
             ) {
                 Box {
                     LazyColumn {
-                        items(uiState.playlistVideos) { playlistVideo ->
-                            PlaylistVideosItem(
-                                playlistVideo = playlistVideo,
+                        items(uiState.playlistVideos) { video ->
+
+                            PlaylistVideoListItem(
+                                channelVideo = video,
                                 onItemClick = {
                                     if (navigator != null) {
+                                        println("channel vidoe id ====> ${video.videoId}")
                                         navigator.push(
                                             VideoPlayerScreen(
                                                 modifier = Modifier,
-                                                videoId = playlistVideo.videoId,
-                                                url = videoBaseUrl + playlistVideo.videoId
+                                                videoId = video.videoId,
+                                                url = videoBaseUrl + video.videoId
                                             )
                                         )
                                     }
                                 })
+
                         }
                     }
                 }
-
             }
             if (isSyncing) {
                 CircularProgressIndicator()
             }
 
+        }
+
+    }
+
+
+
+
+    @Composable
+    fun PlaylistVideoListItem(
+        channelVideo: PlaylistVideoDto,
+        onItemClick: (PlaylistVideoDto) -> Unit
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .clickable { onItemClick(channelVideo) },
+            shape = RoundedCornerShape(16.dp),
+            elevation = 4.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                KamelImage(
+                    asyncPainterResource(data = channelVideo.maxresThumbnail),
+                    contentDescription = channelVideo.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .aspectRatio(16f/9f)// Adjust the width as needed (e.g., 50% of the parent width)
+                )
+
+                Text(
+                    text = channelVideo.title,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                )
+            }
         }
 
     }
