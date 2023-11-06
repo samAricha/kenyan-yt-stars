@@ -173,12 +173,12 @@ fun ChannelImageCell(image: YtChannelDto, selectedCategory: Category){
             .aspectRatio(1f)
             .clickable {
                 if (navigator != null) {
-                    if (selectedCategory.id != 2){
-                        println(">>>>>>selected-category = ${selectedCategory.id}")
-                        navigator.push(VideoListScreen(channelId = image.channelId))
-                    }else{
+                    if (selectedCategory.id == 2){
                         println(">>>>>>selected-category = ${selectedCategory.id}")
                         navigator.push(DetailScreen(channel = image,selectedCategory =  selectedCategory))
+                    }else{
+                        println(">>>>>>selected-category = ${selectedCategory.id}")
+                        navigator.push(VideoListScreen(channelId = image.channelId))
                     }
                 }
 

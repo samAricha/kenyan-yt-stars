@@ -85,8 +85,8 @@ data class DetailScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(16.dp),
-                                        fontSize = 24.sp, // Increase the font size to 24sp
-                                        color = Color.Black // Set the text color as needed
+                                        fontSize = 24.sp,
+                                        color = Color.Black
                                     )
                                 }
                             }
@@ -111,8 +111,6 @@ data class DetailScreen(
                             }
 
                         }
-
-
                     }
             }
 

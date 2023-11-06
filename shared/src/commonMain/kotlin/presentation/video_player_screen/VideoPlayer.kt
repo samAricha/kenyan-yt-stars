@@ -6,11 +6,15 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 
 
-data class VideoPlayerScreen(private val modifier: Modifier, private val url: String) : Screen {
+data class VideoPlayerScreen(
+    private val modifier: Modifier,
+    private val url: String,
+    private val videoId: String
+) : Screen {
     @Composable
     override fun Content() {
 //        VideoPlayer(modifier, url)
-        TrialVideoPlayer(modifier, "0yOg5LaIoGQ")
+        TrialVideoPlayer(modifier, videoId)
     }
 }
 

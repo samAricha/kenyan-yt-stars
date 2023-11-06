@@ -54,14 +54,21 @@ class VideoListViewModel(val channelId: String) : ViewModel(){
     }
 
     init {
-//        _isSyncing.value = true
-//        updatePlaylistVideos()
+        _isSyncing.value = true
+        updateChannelVideos()
+        println("Video list view model init function")
+    }
+
+    override fun onCleared() {
+        httpClient.close()
     }
 
 
-    fun updatePlaylistVideos(){
 
-        viewModelScope.launch {
+    fun updateChannelVideos(){
+        println("inside updateChannelVideos part1,,,,,,,,")
+
+        viewModelScope.launch(Dispatchers.IO) {
             println("inside updatePlaylistVideos,,,,,,,,")
 
             try {
@@ -72,10 +79,11 @@ class VideoListViewModel(val channelId: String) : ViewModel(){
                     it.copy(channelVideos = channelVideos)
                 }
             }catch (e:Exception){
-                println("Exception =====> ${e.message}")
+                println("Exception =====> ${e}")
             }finally {
+                println("finally =====> ${uiState.value.channelVideos}")
                 _isSyncing.value = false
-                println("finally =====> {e.message}")
+
             }
 
         }
@@ -95,7 +103,7 @@ class VideoListViewModel(val channelId: String) : ViewModel(){
         }
 
 
-        println("inside gpv------->${response}")
+        println("inside gottedChannelVideos------->${response}")
         return response
 
     }

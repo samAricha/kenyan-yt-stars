@@ -27,6 +27,9 @@ object ApiUtils {
             is ApiUrl.GetChannelVideosUrl -> {
                 ApiConstants.BASE_URL + ApiConstants.CHANNEL_VIDEOS_ENDPOINT
             }
+            is ApiUrl.GetPlaylistVideosUrl -> {
+                ApiConstants.BASE_URL + ApiConstants.PLAYLIST_VIDEOS_ENDPOINT
+            }
             is ApiUrl.CustomUrl -> {
                 ApiConstants.BASE_URL + apiUrl.path
             }

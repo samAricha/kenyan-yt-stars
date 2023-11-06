@@ -13,11 +13,15 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import presentation.video_list_screen.VideoListRequest
+import utils.apis.ApiUrl
+import utils.apis.ApiUtils
 
 
 data class PlaylistVideosScreenUiState(
@@ -34,6 +38,12 @@ class PlaylistVideosViewModel(val playlistId: String) : ViewModel(){
     private val _uiState = MutableStateFlow<PlaylistVideosScreenUiState>(PlaylistVideosScreenUiState())
     val uiState = _uiState.asStateFlow()
 
+    val playlistVideosUrl = ApiUrl.GetPlaylistVideosUrl
+    val completePlaylistVideosUrl = ApiUtils.generateApiUrl(playlistVideosUrl)
+
+    private val _isSyncing = MutableStateFlow(false)
+    val isSyncing: StateFlow<Boolean> = _isSyncing
+
 
     private val httpClient : HttpClient = HttpClient {
         install(ContentNegotiation){
@@ -42,23 +52,39 @@ class PlaylistVideosViewModel(val playlistId: String) : ViewModel(){
     }
 
     init {
+        _isSyncing.value = true
         updatePlaylistVideos()
     }
 
 
     fun updatePlaylistVideos(){
-        viewModelScope.launch {
-            val playlistVideos = getPlaylistVideos(playlistId = playlistId)
+        println("inside updatePlaylistVideos part1,,,,,,,,")
 
-            _uiState.update {
-                it.copy(playlistVideos = playlistVideos)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _isSyncing.value = true
+                val playlistVideos = getPlaylistVideos(playlistId = playlistId)
+                println("playlist videos ====>>>>> ${playlistVideos}")
+                _uiState.update {
+                    it.copy(playlistVideos = playlistVideos)
+                }
+                println("uistate videos ====>>>>> ${uiState.value}")
+            }catch (e: Exception){
+                println("Exception =====> ${e}")
+            }finally {
+                println("finally =====> ${uiState.value.playlistVideos}")
+                _isSyncing.value = false
             }
+
         }
     }
 
-    private suspend fun getPlaylistVideos(playlistId: String) : List<PlaylistVideoDto>{
-        val videoListsUrl = "https://c7f6-41-89-128-5.ngrok-free.app/api/playlists/getPlaylistVideos"
-        val playlistVideosRequest = PlaylistVideosRequest(playlistId)
+    private suspend fun getPlaylistVideos(
+        playlistId: String
+    ) : List<PlaylistVideoDto>{
+        println("Getting Playlist Videos")
+        val videoListsUrl = completePlaylistVideosUrl
+        val playlistVideosRequest = PlaylistVideosRequest("PLJcxGk1ibvxcY0yuBniKfaS7QlV-8JPPX")
 
         val response  =  withContext(Dispatchers.IO) {
             httpClient.post(videoListsUrl) {

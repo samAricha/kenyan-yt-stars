@@ -9,5 +9,6 @@ sealed class ApiUrl {
     object GetPlaylistersUrl : ApiUrl()
     object GetChannelDetailsUrl : ApiUrl()
     object GetChannelVideosUrl : ApiUrl()
+    object GetPlaylistVideosUrl : ApiUrl()
     data class CustomUrl(val path: String) : ApiUrl()
 }

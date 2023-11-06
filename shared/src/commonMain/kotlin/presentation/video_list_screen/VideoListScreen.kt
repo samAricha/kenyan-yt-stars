@@ -40,16 +40,16 @@ class VideoListScreen(val channelId : String) : Screen {
     override fun Content() {
 
         println("video list screen")
-//        val videoListViewModel = getViewModel(Unit, viewModelFactory {
-//            VideoListViewModel(channelId = channelId)
-//        })
-        val videoListViewModel = rememberKoinInject<VideoListViewModel> { parametersOf(channelId) }
+        val videoListViewModel = getViewModel(Unit, viewModelFactory {
+            VideoListViewModel(channelId = channelId)
+        })
+//        val videoListViewModel = rememberKoinInject<VideoListViewModel> { parametersOf(channelId) }
 
 
         val isSyncing by videoListViewModel.isSyncing.collectAsState()
 
 
-        videoListViewModel.updatePlaylistVideos()
+        videoListViewModel.updateChannelVideos()
 
         val uiState by videoListViewModel.uiState.collectAsState()
         println("debugging======>>>>${uiState}")
@@ -73,6 +73,7 @@ class VideoListScreen(val channelId : String) : Screen {
                                         navigator.push(
                                             VideoPlayerScreen(
                                                 modifier = Modifier,
+                                                videoId = channelVideo.videoId,
                                                 url = videoBaseUrl + channelVideo.videoId
                                             )
                                         )

@@ -16,7 +16,7 @@ actual fun TrialVideoPlayer(modifier: Modifier, videoId: String) {
 
     val ctx = LocalContext.current
     AndroidView(factory = {
-        var view = YouTubePlayerView(it)
+        val view = YouTubePlayerView(it)
         val fragment = view.addYouTubePlayerListener(
             object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
